@@ -1,0 +1,26 @@
+# CI do próprio engine: testes das políticas e lint.
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Instala o Dagger e gera o SDK
+        run: |
+          curl -fsSL https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.21.11 BIN_DIR=/usr/local/bin sudo -E sh
+          dagger develop
+      - name: Instala o uv
+        run: curl -LsSf https://astral.sh/uv/0.13.5/install.sh | sh
+      - run: uv run ruff check src tests
+      - run: uv run pytest -q

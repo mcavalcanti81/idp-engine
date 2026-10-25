@@ -1,0 +1,22 @@
+[project]
+name = "idp-engine"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["dagger-io", "pyyaml>=6"]
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.8"]
+
+[build-system]
+requires = ["uv_build>=0.8.4,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.uv.sources]
+dagger-io = { path = "sdk", editable = true }
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 120
+exclude = ["sdk"]
